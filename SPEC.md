@@ -4,6 +4,7 @@
 
 [![CI](https://github.com/dotbrains/distill/actions/workflows/ci.yml/badge.svg)](https://github.com/dotbrains/distill/actions/workflows/ci.yml)
 [![Release](https://github.com/dotbrains/distill/actions/workflows/release.yml/badge.svg)](https://github.com/dotbrains/distill/actions/workflows/release.yml)
+[![Coverage](https://img.shields.io/badge/coverage-82%25-brightgreen.svg)](https://github.com/dotbrains/distill)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![Go](https://img.shields.io/badge/-Go-00ADD8?style=flat-square&logo=go&logoColor=white)
