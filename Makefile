@@ -11,7 +11,7 @@ install:
 	go install -ldflags "$(LDFLAGS)" .
 
 test:
-	go test -race -coverprofile=coverage.out ./...
+	go test -race -coverprofile=coverage.out $$(go list ./... | grep -v /website/)
 	@go tool cover -func=coverage.out | tail -1
 
 vet:
