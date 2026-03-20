@@ -142,6 +142,12 @@ Sources, agents, templates, and output settings are all configured in `distill.y
 
 Custom templates are supported — add `.md` files to a templates directory and reference them by name.
 
+## Paper
+
+A technical paper describing distill's design and contributions is available in the repo:
+
+[**PAPER.md**](PAPER.md) — covers the template-driven compaction system, multi-source ingestion layer, content-hashing state tracker, pluggable agent architecture, and the full distribution pipeline from context repo creation to team-wide consumption.
+
 ## Dependencies
 
 - **[claude](https://docs.anthropic.com/en/docs/claude-code)** — Claude Code CLI (default agent, no API key needed)
