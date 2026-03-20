@@ -6,7 +6,7 @@
 
 AI coding agents are fundamentally constrained by their context windows. Technical books, framework guides, and architectural references contain critical guidance for code generation and review, but their raw form — hundreds of pages of prose, examples, and anecdotes — cannot be loaded into an agent's working context. Teams address this by manually condensing books into numbered rules or principles, but the process is inconsistent, non-repeatable, and disconnected from the distribution mechanism that makes the output available to agents.
 
-This paper presents distill, a Go CLI that automates the compaction of technical source material into agent-optimized markdown. distill makes four technical contributions: (1) a template-driven compaction system with four built-in output formats (rules, principles, patterns, raw) that enforce consistent structure across heterogeneous source material; (2) a multi-source ingestion layer that reads from local files (markdown, PDF, EPUB), remote sources (Notion via MCP, web URLs, GitHub), and directories of files, producing uniform text chunks for the compaction pipeline; (3) a content-hashing state tracker that enables incremental updates — unchanged sources are skipped, and any change to the source content, template, or agent identity triggers re-compaction; and (4) a pluggable agent architecture supporting both CLI-based (Claude Code, OpenAI Codex) and API-based (Anthropic Messages, OpenAI Chat Completions) AI providers, with the same provider registry pattern used in the companion tool `prr`.
+This paper presents distill, a Go CLI that automates the compaction of technical source material into agent-optimized markdown. distill makes six technical contributions: (1) a template-driven compaction system with four built-in output formats (rules, principles, patterns, raw) that enforce consistent structure across heterogeneous source material; (2) a multi-source ingestion layer that reads from local files (markdown, PDF, EPUB), remote sources (Notion via MCP, web URLs, GitHub), and directories of files, producing uniform text chunks for the compaction pipeline; (3) a content-hashing state tracker that enables incremental updates — unchanged sources are skipped, and any change to the source content, template, or agent identity triggers re-compaction; (4) a pluggable agent architecture supporting both CLI-based (Claude Code, OpenAI Codex) and API-based (Anthropic Messages, OpenAI Chat Completions) AI providers, with the same provider registry pattern used in the companion tool `prr`; (5) a precedence system that controls which context sources take priority when multiple sources provide conflicting guidance — ensuring that organization-specific decisions override general framework guidelines; and (6) a complete distribution pipeline (`distill init` → `distill publish` → `distill install`) that manages the full lifecycle from context repo creation through team-wide consumption via `~/.claude/docs/`.
 
 ## 1. Introduction
 
@@ -190,6 +190,32 @@ var providers = map[string]ProviderFactory{
 
 The default agent is `claude-cli` — zero-config for anyone with a Claude Code subscription.
 
+### 3.6 Precedence and Distribution
+
+When a team maintains context from multiple sources — framework guidelines, organization-specific design principles, and foundational reference books — conflicts are inevitable. A framework guide might recommend one error handling pattern while the team's own design principles mandate a different one. Without explicit precedence, agents have no way to resolve the conflict.
+
+distill addresses this with a `precedence` configuration that defines an ordered list of subdirectories from highest to lowest priority:
+
+```yaml
+output:
+  precedence:
+    - design-principles   # org-specific decisions override everything
+    - tao                 # framework guidelines second
+    - ddia                # reference books third
+```
+
+The root `index.md` includes this hierarchy so agents know which source to follow when guidance conflicts. This mirrors the pattern observed in production shared-context repositories, where organization-specific principles are explicitly documented as taking precedence over general framework guidelines.
+
+The distribution side is equally important. Compacted documents are only useful if agents can load them. distill provides three commands that form a complete lifecycle:
+
+1. **`distill init <name>`** scaffolds a new context repo with index.md, .gitignore, and README.
+2. **`distill publish --repo <path>`** copies compacted output into the context repo and commits.
+3. **`distill install <repo-url>`** clones the context repo into `~/.claude/docs/` (or a custom target) so agents can discover it. If already installed, it pulls the latest changes.
+
+The `install` command also handles a practical detail: if `~/.claude/` is itself a git-managed directory (as it often is for personal agent configuration), `install` automatically adds `docs/` to `~/.claude/.gitignore` to keep the shared context repo separate from the personal config repo.
+
+This three-command pipeline — init, publish, install — means that producing context and consuming context are both single commands, with no manual `git clone`, directory management, or `.gitignore` editing required.
+
 ## 4. Output Format and Context Repo Convention
 
 distill's output follows a hierarchical convention designed for selective loading by AI agents:
@@ -209,7 +235,7 @@ output/
 
 Each subdirectory has an `index.md` that lists its contents with "Load when" guidance. The root `index.md` lists all subdirectories. This two-level index enables agents to discover what context is available and load only what is relevant to the current task — avoiding the token waste of loading everything.
 
-The output directory is designed to be a git repository. `distill init <name>` scaffolds the structure (index.md, .gitignore, README.md). `distill publish --repo <path>` copies output to a target repo and commits. Teams clone the context repo into `~/.claude/docs/` or any directory their agents read from.
+The output directory is designed to be a git repository. `distill init <name>` scaffolds the structure (index.md, .gitignore, README.md). `distill publish` copies output to a target repo and commits. `distill install <repo-url>` clones the repo into `~/.claude/docs/` on each team member's machine. The full lifecycle — produce, distribute, consume — is handled by distill.
 
 The `.distill-state.yaml` file is excluded from the context repo via `.gitignore`. It is an implementation detail of the compaction pipeline, not a document that agents should load.
 
@@ -219,7 +245,7 @@ distill is implemented in Go as a single static binary with no runtime dependenc
 
 The package structure mirrors the companion tool `prr` [9]:
 
-- `cmd/` — Cobra commands: compact, add, update, list, agents, templates, validate, init, publish, config.
+- `cmd/` — Cobra commands: compact, add, update, list, agents, templates, validate, init, install, publish, config.
 - `internal/agent/` — Agent interface, provider registry, and four provider implementations (claudecli, codexcli, anthropic, openai).
 - `internal/config/` — Config loading with project-level → global → defaults precedence.
 - `internal/ingest/` — Ingestor interface and source-type implementations.
@@ -284,11 +310,11 @@ CLI provider tests use a `mockExecutor` that records stdin and returns canned ou
 
 ## 9. Conclusion
 
-distill addresses a specific gap in the agentic development toolchain: the production of structured, agent-optimized knowledge from verbose source material. The key insight is that compaction is a *template-constrained AI task*, not a free-form summarization. By fixing the output format via templates and tracking input hashes for incremental updates, distill makes the process repeatable, consistent, and cheap to maintain.
+distill addresses a specific gap in the agentic development toolchain: the production, distribution, and consumption of structured, agent-optimized knowledge from verbose source material. The key insight is that compaction is a *template-constrained AI task*, not a free-form summarization. By fixing the output format via templates, tracking input hashes for incremental updates, enforcing precedence when sources conflict, and providing a complete init → publish → install distribution pipeline, distill makes the entire lifecycle repeatable, consistent, and cheap to maintain.
 
 The tool is deliberately narrow in scope. It does not embed documents for RAG, does not build vector databases, and does not manage agent routing or tool use. It produces markdown files. The simplicity is the point: markdown files are universal, versionable, and readable by every agent platform. A team that maintains a context repo of distill-generated documents gets consistent AI behavior across Warp, Claude Code, Cursor, and any future agent that reads markdown.
 
-The combination of distill (knowledge production), a shared context repo (knowledge distribution), and tools like prr (knowledge consumption via AI-powered review) forms a complete pipeline for encoding human expertise into agent-accessible form.
+The combination of distill (knowledge production and distribution), a shared context repo (knowledge storage), and tools like prr (knowledge consumption via AI-powered review) forms a complete pipeline for encoding human expertise into agent-accessible form.
 
 ## References
 
