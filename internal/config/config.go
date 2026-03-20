@@ -13,6 +13,7 @@ type Config struct {
 	DefaultAgent string                 `yaml:"default_agent"`
 	Agents       map[string]AgentConfig `yaml:"agents"`
 	Output       OutputConfig           `yaml:"output"`
+	Publish      PublishConfig          `yaml:"publish,omitempty"`
 	Sources      map[string]Source       `yaml:"sources"`
 }
 
@@ -26,25 +27,32 @@ type AgentConfig struct {
 
 // OutputConfig controls where compacted output is written.
 type OutputConfig struct {
-	Dir              string `yaml:"dir"`
-	GenerateIndexes  bool   `yaml:"generate_indexes"`
-	TokenBudget      int    `yaml:"token_budget"`
-	CustomTemplates  string `yaml:"custom_templates_dir,omitempty"`
+	Dir              string   `yaml:"dir"`
+	GenerateIndexes  bool     `yaml:"generate_indexes"`
+	TokenBudget      int      `yaml:"token_budget"`
+	CustomTemplates  string   `yaml:"custom_templates_dir,omitempty"`
+	Precedence       []string `yaml:"precedence,omitempty"`       // subdirectory precedence order (highest first)
+}
+
+// PublishConfig controls where output is published.
+type PublishConfig struct {
+	Repo string `yaml:"repo,omitempty"` // path to target context repo
 }
 
 // Source defines a single source to be compacted.
 type Source struct {
-	Type          string `yaml:"type"`                    // pdf, markdown, notion, url, epub, github
-	Path          string `yaml:"path,omitempty"`          // local file/dir path
-	URL           string `yaml:"url,omitempty"`           // remote URL (notion, url, github)
-	Repo          string `yaml:"repo,omitempty"`          // github repo (owner/repo)
-	Ref           string `yaml:"ref,omitempty"`           // github ref
-	Template      string `yaml:"template"`                // rules, principles, patterns, raw, or custom name
-	OutputDir     string `yaml:"output_dir"`              // subdirectory under output.dir
-	OutputFile    string `yaml:"output_file,omitempty"`   // single output filename
-	OutputPattern string `yaml:"output_pattern,omitempty"` // pattern for multi-file output
-	SplitBy       string `yaml:"split_by,omitempty"`      // "chapter" for per-chapter splitting
+	Type           string `yaml:"type"`                     // pdf, markdown, notion, url, epub, github
+	Path           string `yaml:"path,omitempty"`           // local file/dir path
+	URL            string `yaml:"url,omitempty"`            // remote URL (notion, url, github)
+	Repo           string `yaml:"repo,omitempty"`           // github repo (owner/repo)
+	Ref            string `yaml:"ref,omitempty"`            // github ref
+	Template       string `yaml:"template"`                 // rules, principles, patterns, raw, or custom name
+	OutputDir      string `yaml:"output_dir"`               // subdirectory under output.dir
+	OutputFile     string `yaml:"output_file,omitempty"`    // single output filename
+	OutputPattern  string `yaml:"output_pattern,omitempty"` // pattern for multi-file output
+	SplitBy        string `yaml:"split_by,omitempty"`       // "chapter" for per-chapter splitting
 	ChapterPattern string `yaml:"chapter_pattern,omitempty"` // regex for chapter detection
+	Description    string `yaml:"description,omitempty"`    // human-readable description for index generation
 }
 
 // CLIProviders are providers that use local CLI binaries and don't need API keys.
