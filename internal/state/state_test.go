@@ -135,6 +135,26 @@ func TestState_SaveAndLoad(t *testing.T) {
 	}
 }
 
+func TestState_Save_InvalidDir(t *testing.T) {
+	// Try to save in a read-only / non-writable location
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	// Make directory read-only
+	os.Chmod(dir, 0o444)
+	defer os.Chmod(dir, 0o755)
+
+	s := &State{Sources: map[string]SourceState{
+		"test": {ContentHash: "h"},
+	}}
+	err := s.Save()
+	if err == nil {
+		t.Error("expected error saving to read-only directory")
+	}
+}
+
 func TestLoad_NoFile(t *testing.T) {
 	dir := t.TempDir()
 	origDir, _ := os.Getwd()

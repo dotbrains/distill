@@ -51,6 +51,21 @@ func TestWriteOutput_OverwritesExisting(t *testing.T) {
 	}
 }
 
+func TestWriteOutput_InvalidDir(t *testing.T) {
+	// Writing to /dev/null/impossible should fail
+	_, err := WriteOutput("/dev/null", "sub", "file.md", "content")
+	if err == nil {
+		t.Error("expected error writing to invalid directory")
+	}
+}
+
+func TestWriteIndex_InvalidDir(t *testing.T) {
+	_, err := WriteIndex("/dev/null", "sub", "content")
+	if err == nil {
+		t.Error("expected error writing to invalid directory")
+	}
+}
+
 func TestWriteIndex(t *testing.T) {
 	dir := t.TempDir()
 	path, err := WriteIndex(dir, "tao", "# Index\n\nFiles listed here.")

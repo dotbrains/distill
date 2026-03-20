@@ -184,6 +184,13 @@ func TestGlobalConfigDir(t *testing.T) {
 	}
 }
 
+func TestSaveTo_InvalidPath(t *testing.T) {
+	err := SaveTo(DefaultConfig(), "/dev/null/impossible/config.yaml")
+	if err == nil {
+		t.Error("expected error saving to invalid path")
+	}
+}
+
 func TestCLIProviders(t *testing.T) {
 	if !CLIProviders["claude-cli"] {
 		t.Error("expected claude-cli to be a CLI provider")
