@@ -68,7 +68,7 @@ func stripFrontmatter(content string) string {
 	if !strings.HasPrefix(content, "---") {
 		return content
 	}
-	lines := strings.SplitN(content, "\n", -1)
+	lines := strings.Split(content, "\n")
 	count := 0
 	for i, line := range lines {
 		if strings.TrimSpace(line) == "---" {

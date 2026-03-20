@@ -467,13 +467,9 @@ func TestUpdateCmd_SpecificName_Missing(t *testing.T) {
 	root := newRootCmd("dev")
 	root.SetArgs([]string{"update", "nonexistent"})
 
-	// update delegates to compactSource, which returns an error for missing source
-	err := root.Execute()
-	// The error propagates through cobra
-	if err == nil {
-		// update with a specific name calls compactSource directly, which returns the error
-		// This is expected behavior — just verify it doesn't panic
-	}
+	// update delegates to compactSource, which returns an error for missing source.
+	// We just verify it doesn't panic — the error may or may not propagate through cobra.
+	_ = root.Execute()
 }
 
 func TestAddCmd_DuplicateName(t *testing.T) {
