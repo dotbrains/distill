@@ -558,6 +558,400 @@ func TestAddCmd_AllTypes(t *testing.T) {
 	}
 }
 
+func TestDeriveName_AdditionalCases(t *testing.T) {
+	tests := []struct {
+		typ      string
+		location string
+		want     string
+	}{
+		{"github", "owner/repo", "source"},
+		{"unknown", "anything", "source"},
+		{"url", "https://example.com/", "example.com"},
+		{"notion", "https://notion.so/short", "short"},
+	}
+	for _, tt := range tests {
+		got := deriveName(tt.typ, tt.location)
+		if got != tt.want {
+			t.Errorf("deriveName(%q, %q) = %q, want %q", tt.typ, tt.location, got, tt.want)
+		}
+	}
+}
+
+func TestAgentsCmd_WithAPIKeySet(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	t.Setenv("ANTHROPIC_API_KEY", "sk-test")
+
+	cfg := config.DefaultConfig()
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"agents"})
+	var out bytes.Buffer
+	root.SetOut(&out)
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	output := out.String()
+	// claude-api should show ✓ since ANTHROPIC_API_KEY is set
+	if !strings.Contains(output, "claude-api") {
+		t.Error("expected claude-api in output")
+	}
+	if !strings.Contains(output, "codex-cli") {
+		t.Error("expected codex-cli in output")
+	}
+	if !strings.Contains(output, "gpt-api") {
+		t.Error("expected gpt-api in output")
+	}
+}
+
+func TestAgentsCmd_AllProviderTypes(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	cfg := config.DefaultConfig()
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"agents"})
+	var out bytes.Buffer
+	root.SetOut(&out)
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	output := out.String()
+	// All 4 default agents should appear
+	for _, name := range []string{"claude-cli", "codex-cli", "claude-api", "gpt-api"} {
+		if !strings.Contains(output, name) {
+			t.Errorf("expected %q in agents output", name)
+		}
+	}
+	// CLI providers should show ✓ (cli)
+	if !strings.Contains(output, "✓ (cli)") {
+		t.Error("expected '✓ (cli)' for CLI providers")
+	}
+	// API providers without keys should show ✗
+	if !strings.Contains(output, "✗ (not set)") {
+		t.Error("expected '✗ (not set)' for unset API keys")
+	}
+	if !strings.Contains(output, "Default:") {
+		t.Error("expected 'Default:' line")
+	}
+}
+
+func TestAddCmd_WithSplitBy(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	cfg := config.DefaultConfig()
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"add", "pdf", "~/Books/ddia.pdf", "--name", "ddia", "--template", "principles", "--split-by", "chapter"})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	loaded, _ := config.LoadFrom("distill.yaml")
+	src, ok := loaded.Sources["ddia"]
+	if !ok {
+		t.Fatal("source 'ddia' not found")
+	}
+	if src.SplitBy != "chapter" {
+		t.Errorf("expected split_by 'chapter', got %q", src.SplitBy)
+	}
+	if src.Template != "principles" {
+		t.Errorf("expected template 'principles', got %q", src.Template)
+	}
+}
+
+func TestAddCmd_AutoDeriveName(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	cfg := config.DefaultConfig()
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"add", "pdf", "~/Books/Clean Code.pdf"})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	loaded, _ := config.LoadFrom("distill.yaml")
+	if _, ok := loaded.Sources["clean-code"]; !ok {
+		t.Error("expected auto-derived name 'clean-code'")
+	}
+}
+
+func TestCompactCmd_DryRunWithTokenBudget(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	os.WriteFile("source.md", []byte("# Content\n\nText."), 0o644)
+
+	cfg := config.DefaultConfig()
+	cfg.Sources = map[string]config.Source{
+		"src": {Type: "markdown", Path: "./source.md", Template: "rules", OutputDir: "out"},
+	}
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"src", "--dry-run", "--token-budget", "2000"})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestCompactCmd_DefaultOutputFilename(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	os.WriteFile("source.md", []byte("# Content"), 0o644)
+
+	// Source without output_file — should default to name-minified.md
+	cfg := config.DefaultConfig()
+	cfg.Sources = map[string]config.Source{
+		"my-guide": {Type: "markdown", Path: "./source.md", Template: "rules", OutputDir: "out"},
+	}
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"my-guide", "--dry-run"})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestInitCmd_VerifyContents(t *testing.T) {
+	dir := t.TempDir()
+	repoName := filepath.Join(dir, "test-context")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"init", repoName})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// Verify index.md content
+	data, _ := os.ReadFile(filepath.Join(repoName, "index.md"))
+	if !strings.Contains(string(data), "test-context") {
+		t.Error("index.md should contain repo name")
+	}
+	if !strings.Contains(string(data), "distill") {
+		t.Error("index.md should reference distill")
+	}
+
+	// Verify .gitignore
+	data, _ = os.ReadFile(filepath.Join(repoName, ".gitignore"))
+	if !strings.Contains(string(data), ".distill-state.yaml") {
+		t.Error(".gitignore should exclude state file")
+	}
+
+	// Verify README.md
+	data, _ = os.ReadFile(filepath.Join(repoName, "README.md"))
+	if !strings.Contains(string(data), "test-context") {
+		t.Error("README should contain repo name")
+	}
+	if !strings.Contains(string(data), "~/.claude") {
+		t.Error("README should mention ~/.claude")
+	}
+}
+
+func TestInitCmd_MissingArg(t *testing.T) {
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"init"})
+
+	err := root.Execute()
+	if err == nil {
+		t.Fatal("expected error for missing arg")
+	}
+}
+
+func TestListCmd_MultipleSources(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	cfg := config.DefaultConfig()
+	cfg.Sources = map[string]config.Source{
+		"alpha": {Type: "pdf", Template: "rules", OutputDir: "a"},
+		"beta":  {Type: "markdown", Template: "principles", OutputDir: "b"},
+		"gamma": {Type: "url", Template: "patterns", OutputDir: "c"},
+	}
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"list"})
+	var out bytes.Buffer
+	root.SetOut(&out)
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	output := out.String()
+	// Should be sorted alphabetically
+	alphaIdx := strings.Index(output, "alpha")
+	betaIdx := strings.Index(output, "beta")
+	gammaIdx := strings.Index(output, "gamma")
+	if alphaIdx > betaIdx || betaIdx > gammaIdx {
+		t.Error("expected sources sorted alphabetically")
+	}
+	if !strings.Contains(output, "rules") {
+		t.Error("expected template names in output")
+	}
+}
+
+func TestUpdateCmd_DryRun(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	os.WriteFile("source.md", []byte("# Test"), 0o644)
+
+	cfg := config.DefaultConfig()
+	cfg.Sources = map[string]config.Source{
+		"src": {Type: "markdown", Path: "./source.md", Template: "rules", OutputDir: "out", OutputFile: "out.md"},
+	}
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"update", "src", "--dry-run"})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestAddCmd_NotionSource(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	cfg := config.DefaultConfig()
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"add", "notion", "https://notion.so/page-abc123", "--name", "my-notion"})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	loaded, _ := config.LoadFrom("distill.yaml")
+	src := loaded.Sources["my-notion"]
+	if src.URL != "https://notion.so/page-abc123" {
+		t.Errorf("expected URL to be set, got %q", src.URL)
+	}
+	if src.Type != "notion" {
+		t.Errorf("expected type 'notion', got %q", src.Type)
+	}
+}
+
+func TestAddCmd_GitHubSource(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	cfg := config.DefaultConfig()
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"add", "github", "owner/repo", "--name", "upstream"})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	loaded, _ := config.LoadFrom("distill.yaml")
+	src := loaded.Sources["upstream"]
+	if src.Repo != "owner/repo" {
+		t.Errorf("expected Repo 'owner/repo', got %q", src.Repo)
+	}
+}
+
+func TestCompactCmd_WithSpecificAgent(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	os.WriteFile("src.md", []byte("# Test"), 0o644)
+
+	cfg := config.DefaultConfig()
+	cfg.Sources = map[string]config.Source{
+		"test": {Type: "markdown", Path: "./src.md", Template: "rules", OutputDir: "out"},
+	}
+	config.SaveTo(cfg, "distill.yaml")
+
+	// Use codex-cli agent (will fail to exec, but exercises the agent selection path)
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"test", "--agent", "codex-cli", "--dry-run"})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestCompactCmd_BadAgent(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(origDir)
+
+	os.WriteFile("src.md", []byte("# Test"), 0o644)
+
+	cfg := config.DefaultConfig()
+	cfg.Sources = map[string]config.Source{
+		"test": {Type: "markdown", Path: "./src.md", Template: "rules", OutputDir: "out"},
+	}
+	config.SaveTo(cfg, "distill.yaml")
+
+	root := newRootCmd("dev")
+	root.SetArgs([]string{"test", "--agent", "nonexistent-agent"})
+
+	err := root.Execute()
+	if err == nil {
+		t.Fatal("expected error for nonexistent agent")
+	}
+}
+
 func TestExecute(t *testing.T) {
 	// Just verify Execute doesn't panic when called with --help
 	origArgs := os.Args
