@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, RefreshCw, Layers, Hash, BookOpen, Terminal, Cpu, FolderTree, Settings } from 'lucide-react';
+import { FileText, RefreshCw, Layers, Hash, BookOpen, Terminal, Cpu, FolderTree, Settings, Download, ArrowUpDown } from 'lucide-react';
 
 export function FeaturesSection() {
   const features = [
@@ -40,9 +40,14 @@ export function FeaturesSection() {
       description: 'Split books by chapter with split_by: chapter. Each chapter becomes a separate output file with its own entry in the index.',
     },
     {
+      icon: <ArrowUpDown className="w-6 h-6" />,
+      title: 'Precedence Control',
+      description: 'Configure priority order for subdirectories. Org-specific principles override framework guidelines, which override reference books.',
+    },
+    {
       icon: <Terminal className="w-6 h-6" />,
-      title: 'Context Repo Publishing',
-      description: 'distill publish copies output to a git repo and commits. Teams clone into ~/.claude/docs/ for shared agent context.',
+      title: 'Publish + Install',
+      description: 'distill publish pushes to a context repo. distill install clones it into ~/.claude/docs/. Full producer → consumer pipeline.',
     },
     {
       icon: <Settings className="w-6 h-6" />,

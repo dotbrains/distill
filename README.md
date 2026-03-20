@@ -45,6 +45,9 @@ distill list
 # Scaffold a new context repo
 distill init my-context
 
+# Install a shared context repo for your agents
+distill install https://github.com/myteam/shared-context.git
+
 # See available templates
 distill templates
 ```
@@ -123,7 +126,9 @@ Sources, agents, templates, and output settings are all configured in `distill.y
 | `distill templates` | List available compaction templates |
 | `distill validate [name]` | Validate output format and token budget |
 | `distill init <name>` | Scaffold a new context repo |
+| `distill install <repo-url>` | Clone a context repo into `~/.claude/docs/` for agent consumption |
 | `distill publish` | Copy output to a context repo and commit |
+| `distill agents` | List configured AI agents and their status |
 | `distill config init` | Create default config file |
 
 ## Templates

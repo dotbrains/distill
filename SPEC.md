@@ -66,7 +66,13 @@ output:
   dir: ./output                     # where compacted docs are written
   generate_indexes: true            # auto-generate index.md files
   token_budget: 4000                # target max tokens per output file
-  token_counter: tiktoken           # tokenizer for budget enforcement
+  precedence:                       # subdirectory priority order (highest first)
+    - design-principles             # org-specific decisions override everything
+    - tao                           # framework guidelines second
+    - ddia                          # reference books third
+
+publish:
+  repo: ~/.claude/docs              # default target for `distill publish`
 
 sources:
   tao-of-react:
@@ -75,6 +81,7 @@ sources:
     template: rules
     output_dir: tao
     output_file: tao-of-react-minified.md
+    description: React best practices and component patterns
 
   tao-of-node:
     type: pdf
@@ -82,6 +89,7 @@ sources:
     template: rules
     output_dir: tao
     output_file: tao-of-node-minified.md
+    description: Node.js architecture and async patterns
 
   ddia:
     type: pdf
@@ -90,6 +98,7 @@ sources:
     output_dir: ddia
     split_by: chapter
     output_pattern: ddia_{chapter_num}_minified.md
+    description: Data systems architecture and distributed systems principles
 
   custom-guide:
     type: markdown
@@ -97,6 +106,7 @@ sources:
     template: rules
     output_dir: guides
     output_file: internal-guide-minified.md
+    description: Team coding conventions and style guide
 ```
 
 ### `distill config init`
@@ -229,6 +239,24 @@ $ distill publish --repo ~/.claude/docs --push
 → Updated: tao/tao-of-react-minified.md, tao/index.md
 → Committed: "distill: update tao-of-react"
 → Pushed to origin/main.
+```
+
+### `distill install <repo-url>`
+
+Clone a context repo into `~/.claude/docs/` (or a custom `--target` directory) so AI agents can discover and load the compacted documents.
+
+- If the target already exists as a git repo, pulls the latest changes instead of re-cloning.
+- If `~/.claude/` is a git repo, automatically adds `docs/` to its `.gitignore` to keep the repos separate.
+
+```
+$ distill install https://github.com/myteam/shared-context.git
+→ Cloning into ~/.claude/docs/...
+✓ Context repo installed at ~/.claude/docs/
+  Agents can now load documents from this directory.
+
+$ distill install https://github.com/myteam/shared-context.git
+→ ~/.claude/docs/ already exists, pulling latest...
+✓ Context repo updated.
 ```
 
 ### `distill init`

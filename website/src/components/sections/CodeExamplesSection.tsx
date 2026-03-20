@@ -30,7 +30,11 @@ $ distill update --force
 # List tracked sources
 $ distill list
   tao-of-react    pdf     rules     tao/     2847 tok   ✓ current
-  ddia            pdf     principles ddia/   -          ✗ not yet`,
+  ddia            pdf     principles ddia/   -          ✗ not yet
+
+# Install a shared context repo for agents
+$ distill install https://github.com/myteam/context.git
+✓ Context repo installed at ~/.claude/docs/`,
     config: `# distill.yaml
 default_agent: claude-cli
 
