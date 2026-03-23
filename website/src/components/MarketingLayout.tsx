@@ -121,7 +121,7 @@ export function MarketingFooter() {
         </div>
         <div className="pt-8 border-t border-distill-purple/30 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-cream/60 text-sm">© {new Date().getFullYear()} distill. All rights reserved.</p>
-          <p className="text-cream/50 text-xs">Open source software licensed under MIT</p>
+          <p className="text-cream/50 text-xs">Licensed under PolyForm Shield 1.0.0</p>
         </div>
       </div>
     </footer>
