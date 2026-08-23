@@ -31,7 +31,7 @@ export function MarketingNav({ transparent = false }: MarketingNavProps) {
           <a href="/#use-cases" onClick={(e) => handleSmoothScroll(e, '#use-cases')} className="text-cream/80 hover:text-cream transition-colors text-sm font-medium">Use Cases</a>
           <a href="/#paper" onClick={(e) => handleSmoothScroll(e, '#paper')} className="text-cream/80 hover:text-cream transition-colors text-sm font-medium">Paper</a>
           <div className="flex items-center gap-3 ml-2">
-            <a href="https://github.com/dotbrains/distill" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-dark-gray hover:bg-dark-slate border border-distill-purple text-cream rounded-lg transition-colors text-sm font-medium">
+            <a href="https://github.com/smeltery/distill" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-dark-gray hover:bg-dark-slate border border-distill-purple text-cream rounded-lg transition-colors text-sm font-medium">
               <Github className="w-4 h-4" />
               <span>Star</span>
             </a>
@@ -54,7 +54,7 @@ export function MarketingNav({ transparent = false }: MarketingNavProps) {
             <a href="/#use-cases" onClick={(e) => handleSmoothScroll(e, '#use-cases')} className="block text-cream/80 hover:text-cream transition-colors text-base font-medium py-2">Use Cases</a>
             <a href="/#paper" onClick={(e) => handleSmoothScroll(e, '#paper')} className="block text-cream/80 hover:text-cream transition-colors text-base font-medium py-2">Paper</a>
             <div className="pt-4 space-y-3 border-t border-distill-purple/20">
-              <a href="https://github.com/dotbrains/distill" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-4 py-3 bg-dark-gray hover:bg-dark-slate border border-distill-purple text-cream rounded-lg transition-colors text-sm font-medium w-full">
+              <a href="https://github.com/smeltery/distill" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-4 py-3 bg-dark-gray hover:bg-dark-slate border border-distill-purple text-cream rounded-lg transition-colors text-sm font-medium w-full">
                 <Github className="w-4 h-4" />
                 <span>Star on GitHub</span>
               </a>
@@ -88,7 +88,7 @@ export function MarketingFooter() {
               AI-powered knowledge compactor for agents. Turn books into agent context. Open source and free to use.
             </p>
             <div className="flex items-center gap-3">
-              <a href="https://github.com/dotbrains/distill" className="text-cream/60 hover:text-cream transition-colors" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <a href="https://github.com/smeltery/distill" className="text-cream/60 hover:text-cream transition-colors" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                 <Github className="w-5 h-5" />
               </a>
             </div>
@@ -105,17 +105,17 @@ export function MarketingFooter() {
           <div>
             <h4 className="text-cream font-semibold mb-4 text-sm uppercase tracking-wider">Resources</h4>
             <ul className="space-y-3">
-              <li><a href="https://github.com/dotbrains/distill#readme" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Documentation <ExternalLink className="w-3 h-3" /></a></li>
-              <li><a href="https://github.com/dotbrains/distill/blob/main/SPEC.md" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Specification <ExternalLink className="w-3 h-3" /></a></li>
-              <li><a href="https://github.com/dotbrains/distill/blob/main/PAPER.md" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Paper <ExternalLink className="w-3 h-3" /></a></li>
+              <li><a href="https://github.com/smeltery/distill#readme" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Documentation <ExternalLink className="w-3 h-3" /></a></li>
+              <li><a href="https://github.com/smeltery/distill/blob/main/SPEC.md" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Specification <ExternalLink className="w-3 h-3" /></a></li>
+              <li><a href="https://github.com/smeltery/distill/blob/main/PAPER.md" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Paper <ExternalLink className="w-3 h-3" /></a></li>
             </ul>
           </div>
           <div>
             <h4 className="text-cream font-semibold mb-4 text-sm uppercase tracking-wider">Community</h4>
             <ul className="space-y-3">
-              <li><a href="https://github.com/dotbrains/distill" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">GitHub Repository <ExternalLink className="w-3 h-3" /></a></li>
-              <li><a href="https://github.com/dotbrains/distill/issues" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Report Issues <ExternalLink className="w-3 h-3" /></a></li>
-              <li><a href="https://github.com/dotbrains/distill/discussions" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Discussions <ExternalLink className="w-3 h-3" /></a></li>
+              <li><a href="https://github.com/smeltery/distill" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">GitHub Repository <ExternalLink className="w-3 h-3" /></a></li>
+              <li><a href="https://github.com/smeltery/distill/issues" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Report Issues <ExternalLink className="w-3 h-3" /></a></li>
+              <li><a href="https://github.com/smeltery/distill/discussions" className="text-cream/70 hover:text-cream text-sm transition-colors inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">Discussions <ExternalLink className="w-3 h-3" /></a></li>
             </ul>
           </div>
         </div>

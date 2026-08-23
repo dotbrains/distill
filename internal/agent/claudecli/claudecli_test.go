@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dotbrains/distill/internal/agent"
-	"github.com/dotbrains/distill/internal/config"
+	"github.com/smeltery/distill/internal/agent"
+	"github.com/smeltery/distill/internal/config"
 )
 
 type mockExecutor struct {

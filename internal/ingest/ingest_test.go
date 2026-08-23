@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dotbrains/distill/internal/config"
+	"github.com/smeltery/distill/internal/config"
 )
 
 func TestNew_Markdown(t *testing.T) {

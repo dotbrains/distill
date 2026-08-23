@@ -7,9 +7,9 @@ export function QuickStartSection() {
   const [installMethod, setInstallMethod] = useState<'go' | 'brew' | 'release'>('go');
 
   const installExamples = {
-    go: `go install github.com/dotbrains/distill@latest`,
-    brew: `brew tap dotbrains/tap\nbrew install --cask distill`,
-    release: `gh release download --repo dotbrains/distill \\\n  --pattern 'distill_darwin_arm64.tar.gz' --dir /tmp\ntar -xzf /tmp/distill_darwin_arm64.tar.gz -C /usr/local/bin`,
+    go: `go install github.com/smeltery/distill@latest`,
+    brew: `brew tap smeltery/tap\nbrew install --cask distill`,
+    release: `gh release download --repo smeltery/distill \\\n  --pattern 'distill_darwin_arm64.tar.gz' --dir /tmp\ntar -xzf /tmp/distill_darwin_arm64.tar.gz -C /usr/local/bin`,
   };
 
   return (

@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/dotbrains/distill/internal/config"
+	"github.com/smeltery/distill/internal/config"
 )
 
 // MarkdownIngestor reads local markdown files.

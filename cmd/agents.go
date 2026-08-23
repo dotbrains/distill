@@ -6,11 +6,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	_ "github.com/dotbrains/distill/internal/agent/anthropic" // register provider
-	_ "github.com/dotbrains/distill/internal/agent/claudecli" // register provider
-	_ "github.com/dotbrains/distill/internal/agent/codexcli"  // register provider
-	_ "github.com/dotbrains/distill/internal/agent/openai"    // register provider
-	"github.com/dotbrains/distill/internal/config"
+	_ "github.com/smeltery/distill/internal/agent/anthropic" // register provider
+	_ "github.com/smeltery/distill/internal/agent/claudecli" // register provider
+	_ "github.com/smeltery/distill/internal/agent/codexcli"  // register provider
+	_ "github.com/smeltery/distill/internal/agent/openai"    // register provider
+	"github.com/smeltery/distill/internal/config"
 )
 
 func newAgentsCmd() *cobra.Command {

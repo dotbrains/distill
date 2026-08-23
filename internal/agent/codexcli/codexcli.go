@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/dotbrains/distill/internal/agent"
-	"github.com/dotbrains/distill/internal/config"
-	"github.com/dotbrains/distill/internal/exec"
+	"github.com/smeltery/distill/internal/agent"
+	"github.com/smeltery/distill/internal/config"
+	"github.com/smeltery/distill/internal/exec"
 )
 
 // CodexCLI implements agent.Agent using the OpenAI Codex CLI binary.

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dotbrains/distill/internal/config"
+	"github.com/smeltery/distill/internal/config"
 )
 
 func TestDeriveName_PDF(t *testing.T) {

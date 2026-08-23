@@ -3,7 +3,7 @@ package ingest
 import (
 	"fmt"
 
-	"github.com/dotbrains/distill/internal/config"
+	"github.com/smeltery/distill/internal/config"
 )
 
 // Chunk represents a logical section of ingested content.

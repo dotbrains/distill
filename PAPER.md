@@ -1,6 +1,6 @@
 # distill: A Template-Driven Knowledge Compaction Pipeline for AI Agents
 
-**Nicholas Adamou — dotbrains**
+**Nicholas Adamou — smeltery**
 
 ## Abstract
 
@@ -254,7 +254,7 @@ The package structure mirrors the companion tool `prr` [9]:
 - `internal/state/` — Content hashing and dirty detection via `.distill-state.yaml`.
 - `internal/exec/` — Command executor abstraction for testability.
 
-The shared patterns between distill and prr (agent registry, exec abstraction, config loading, Cobra CLI structure, GoReleaser releases) are intentional. A future shared module (`github.com/dotbrains/agentkit`) could deduplicate these, but premature extraction is worse than duplication.
+The shared patterns between distill and prr (agent registry, exec abstraction, config loading, Cobra CLI structure, GoReleaser releases) are intentional. A future shared module (`github.com/smeltery/agentkit`) could deduplicate these, but premature extraction is worse than duplication.
 
 ## 6. Testing
 
@@ -334,7 +334,7 @@ The combination of distill (knowledge production and distribution), a shared con
 
 [8] Notion Labs. *Notion API*. https://developers.notion.com
 
-[9] Nicholas Adamou. *prr: AI-Powered PR Code Review CLI*. https://github.com/dotbrains/prr
+[9] Nicholas Adamou. *prr: AI-Powered PR Code Review CLI*. https://github.com/smeltery/prr
 
 [10] Steve Francia. *Cobra: A Commander for modern Go CLI interactions*. https://github.com/spf13/cobra
 
@@ -342,4 +342,4 @@ The combination of distill (knowledge production and distribution), a shared con
 
 [12] Anthropic. *Introducing Contextual Retrieval*. https://www.anthropic.com/news/contextual-retrieval
 
-*distill is available at https://github.com/dotbrains/distill under the MIT License.*
+*distill is available at https://github.com/smeltery/distill under the MIT License.*

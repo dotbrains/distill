@@ -2,9 +2,9 @@
 
 ![distill](./assets/og-image.svg)
 
-[![CI](https://github.com/dotbrains/distill/actions/workflows/ci.yml/badge.svg)](https://github.com/dotbrains/distill/actions/workflows/ci.yml)
-[![Release](https://github.com/dotbrains/distill/actions/workflows/release.yml/badge.svg)](https://github.com/dotbrains/distill/actions/workflows/release.yml)
-[![Coverage](https://img.shields.io/badge/coverage-82%25-brightgreen.svg)](https://github.com/dotbrains/distill)
+[![CI](https://github.com/smeltery/distill/actions/workflows/ci.yml/badge.svg)](https://github.com/smeltery/distill/actions/workflows/ci.yml)
+[![Release](https://github.com/smeltery/distill/actions/workflows/release.yml/badge.svg)](https://github.com/smeltery/distill/actions/workflows/release.yml)
+[![Coverage](https://img.shields.io/badge/coverage-82%25-brightgreen.svg)](https://github.com/smeltery/distill)
 [![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/License-PolyForm%20Shield%201.0.0-blue.svg)](https://polyformproject.org/licenses/shield/1.0.0/)
 
 ![Go](https://img.shields.io/badge/-Go-00ADD8?style=flat-square&logo=go&logoColor=white)
@@ -19,7 +19,7 @@ Compact technical books, documentation, and reference material into agent-optimi
 
 ```sh
 # Install
-go install github.com/dotbrains/distill@latest
+go install github.com/smeltery/distill@latest
 
 # Initialize a config
 distill config init
@@ -80,27 +80,27 @@ output/
 ### Via `go install`
 
 ```sh
-go install github.com/dotbrains/distill@latest
+go install github.com/smeltery/distill@latest
 ```
 
 ### Via Homebrew
 
 ```sh
-brew tap dotbrains/tap
+brew tap smeltery/tap
 brew install --cask distill
 ```
 
 ### Via GitHub Release
 
 ```sh
-gh release download --repo dotbrains/distill --pattern 'distill_darwin_arm64.tar.gz' --dir /tmp
+gh release download --repo smeltery/distill --pattern 'distill_darwin_arm64.tar.gz' --dir /tmp
 tar -xzf /tmp/distill_darwin_arm64.tar.gz -C /usr/local/bin
 ```
 
 ### From source
 
 ```sh
-git clone https://github.com/dotbrains/distill.git
+git clone https://github.com/smeltery/distill.git
 cd distill
 make install
 ```

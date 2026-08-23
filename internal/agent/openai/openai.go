@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/dotbrains/distill/internal/agent"
-	"github.com/dotbrains/distill/internal/config"
+	"github.com/smeltery/distill/internal/agent"
+	"github.com/smeltery/distill/internal/config"
 )
 
 const defaultBaseURL = "https://api.openai.com"

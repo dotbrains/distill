@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/dotbrains/distill/internal/config"
+	"github.com/smeltery/distill/internal/config"
 )
 
 func TestTruncate(t *testing.T) {

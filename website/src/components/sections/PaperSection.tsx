@@ -30,12 +30,12 @@ export function PaperSection() {
                 <h3 className="text-cream font-bold text-lg sm:text-xl leading-snug">distill: A Template-Driven Knowledge Compaction Pipeline for AI Agents</h3>
               </div>
             </div>
-            <p className="text-cream/50 text-xs mb-5">Nicholas Adamou — dotbrains</p>
+            <p className="text-cream/50 text-xs mb-5">Nicholas Adamou — smeltery</p>
             <p className="text-cream/70 text-sm leading-relaxed mb-8">
               AI agents are constrained by their context windows. Technical books contain critical guidance but at 200-600 pages they are too verbose to load. This paper presents distill and the four design decisions that make knowledge compaction repeatable, consistent, and cheap to maintain.
             </p>
             <a
-              href="https://github.com/dotbrains/distill/blob/main/PAPER.md"
+              href="https://github.com/smeltery/distill/blob/main/PAPER.md"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-distill-purple to-distill-violet hover:from-distill-violet hover:to-distill-lavender text-white px-6 py-3 rounded-lg shadow-lg shadow-distill-purple/30 text-sm font-semibold transition-all"

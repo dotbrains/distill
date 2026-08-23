@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/dotbrains/distill/cmd"
+	"github.com/smeltery/distill/cmd"
 )
 
 var version = "dev"

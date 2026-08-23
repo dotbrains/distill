@@ -8,16 +8,16 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/dotbrains/distill/internal/agent"
-	_ "github.com/dotbrains/distill/internal/agent/anthropic" // register provider
-	_ "github.com/dotbrains/distill/internal/agent/claudecli" // register provider
-	_ "github.com/dotbrains/distill/internal/agent/codexcli"  // register provider
-	_ "github.com/dotbrains/distill/internal/agent/openai"    // register provider
-	"github.com/dotbrains/distill/internal/config"
-	"github.com/dotbrains/distill/internal/ingest"
-	"github.com/dotbrains/distill/internal/state"
-	"github.com/dotbrains/distill/internal/template"
-	"github.com/dotbrains/distill/internal/writer"
+	"github.com/smeltery/distill/internal/agent"
+	_ "github.com/smeltery/distill/internal/agent/anthropic" // register provider
+	_ "github.com/smeltery/distill/internal/agent/claudecli" // register provider
+	_ "github.com/smeltery/distill/internal/agent/codexcli"  // register provider
+	_ "github.com/smeltery/distill/internal/agent/openai"    // register provider
+	"github.com/smeltery/distill/internal/config"
+	"github.com/smeltery/distill/internal/ingest"
+	"github.com/smeltery/distill/internal/state"
+	"github.com/smeltery/distill/internal/template"
+	"github.com/smeltery/distill/internal/writer"
 )
 
 func runCompact(cmd *cobra.Command, args []string) error {

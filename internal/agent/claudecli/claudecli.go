@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/dotbrains/distill/internal/agent"
-	"github.com/dotbrains/distill/internal/config"
-	"github.com/dotbrains/distill/internal/exec"
+	"github.com/smeltery/distill/internal/agent"
+	"github.com/smeltery/distill/internal/config"
+	"github.com/smeltery/distill/internal/exec"
 )
 
 // ClaudeCLI implements agent.Agent using the claude CLI binary.

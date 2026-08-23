@@ -9,11 +9,11 @@ builds:
 
 homebrew_casks:
   - repository:
-      owner: dotbrains
+      owner: smeltery
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
     name: distill
-    homepage: https://github.com/dotbrains/distill
+    homepage: https://github.com/smeltery/distill
     description: AI-powered knowledge compactor for agents
     license: "MIT"
     binaries: [distill]

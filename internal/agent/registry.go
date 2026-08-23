@@ -3,7 +3,7 @@ package agent
 import (
 	"fmt"
 
-	"github.com/dotbrains/distill/internal/config"
+	"github.com/smeltery/distill/internal/config"
 )
 
 // ProviderFactory creates an Agent from a name and config.

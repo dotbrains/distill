@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dotbrains/distill/internal/agent"
-	"github.com/dotbrains/distill/internal/config"
+	"github.com/smeltery/distill/internal/agent"
+	"github.com/smeltery/distill/internal/config"
 )
 
 func TestNew_MissingAPIKey(t *testing.T) {

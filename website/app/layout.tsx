@@ -2,13 +2,13 @@ import type { Metadata } from 'next';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://distill.dotbrains.io'),
+  metadataBase: new URL('https://distill.smeltery.io'),
   title: 'distill — AI-Powered Knowledge Compactor for Agents',
   description: 'Compact technical books into agent-optimized markdown. Template-driven AI compaction with incremental updates, multi-source ingestion, and pluggable agents.',
   openGraph: {
     title: 'distill — AI-Powered Knowledge Compactor for Agents',
     description: 'Compact technical books into agent-optimized markdown. Template-driven AI compaction with incremental updates, multi-source ingestion, and pluggable agents.',
-    url: 'https://distill.dotbrains.io',
+    url: 'https://distill.smeltery.io',
     siteName: 'distill',
     images: [
       {
